@@ -43,3 +43,20 @@ docker run -it -p 8080:8080 <image name>
 curl http://localhost:8080/health
 ```
 open URL http://localhost:8080 at your browser
+
+### Deploy to k8s
+Push image to ECR. ECR should be created before (terraform/dev/simpletime).
+```bash
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 898344057637.dkr.ecr.us-east-1.amazonaws.com
+docker tag f0146b5af542 898344057637.dkr.ecr.us-east-1.amazonaws.com/simpletime
+docker push 898344057637.dkr.ecr.us-east-1.amazonaws.com/simpletime
+```
+
+## Infrastructure
+
+
+## What can be improved
+
+### Application
+- Using WSGI instead of buildin
+- Using templates instead of hardcoded html
