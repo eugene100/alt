@@ -27,3 +27,19 @@ Simple time application
 If you have any questions do not hesitate to ping me.
 
 Regards!
+
+## Development
+
+### How to build docker image
+```bash
+cd app/simpletime/
+docker build -t <image name> .
+```
+
+### How to run container
+```bash
+docker run -it -p 8080:8080 <image name>
+# Check app health. Shuold return 200
+curl http://localhost:8080/health
+```
+open URL http://localhost:8080 at your browser
