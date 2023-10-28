@@ -69,7 +69,12 @@ kubectx arn:aws:eks:us-east-1:898344057637:cluster/dev-01
 ```
 
 ### simpletime
-Located in terraform/dev/simpletime. It creates ECR repository for simpletime application.
+Located in `terraform/dev/simpletime`. It creates ECR repository for simpletime application.
+Helm chart is located in `app/helm/simpletime/`. It creates deployment and service for simpletime application.
+Upgrading simpletime application
+```bash
+helm upgrade -i simpletime .
+```
 
 ## What can be improved
 
