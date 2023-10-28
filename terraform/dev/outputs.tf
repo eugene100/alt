@@ -21,10 +21,6 @@ output "igw_id" {
   value       = module.vpc.igw_id
 }
 
-output "legacy_azs" {
-  value = var.legacy_azs
-}
-
 output "azs" {
   value = var.azs
 }

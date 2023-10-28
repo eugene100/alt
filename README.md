@@ -54,6 +54,22 @@ docker push 898344057637.dkr.ecr.us-east-1.amazonaws.com/simpletime
 
 ## Infrastructure
 
+Infrastructure is created using terraform. It creates VPC, EKS cluster, ECR repository and IAM roles.
+
+### VPC
+Located in terraform/dev/vpc. It creates VPC with 2 public subnets and 2 private subnets. Public subnets are used for EKS cluster. Private subnets are used for EKS worker nodes.
+
+### EKS
+Located in terraform/dev/eks. It creates EKS cluster and Fargate profiles.
+
+Add dev-01 cluster to kubeconfig and switch to it
+```
+aws eks update-kubeconfig --region us-east-1 --name dev-01
+kubectx arn:aws:eks:us-east-1:898344057637:cluster/dev-01
+```
+
+### simpletime
+Located in terraform/dev/simpletime. It creates ECR repository for simpletime application.
 
 ## What can be improved
 

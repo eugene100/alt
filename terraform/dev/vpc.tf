@@ -5,7 +5,7 @@ module "vpc" {
 
   name                         = var.name
   cidr                         = var.vpc_cidr
-  azs                          = split(",", var.legacy_azs)
+  azs                          = split(",", var.azs)
   public_subnets               = split(",", var.public_subnets)
   private_subnets              = split(",", var.private_subnets)
 
