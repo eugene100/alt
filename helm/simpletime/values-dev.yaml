@@ -1,0 +1,47 @@
+#  values file for dev environment
+replicaCount: 1
+
+image:
+  repository: 898344057637.dkr.ecr.us-east-1.amazonaws.com/simpletime
+  pullPolicy: Always
+  tag: latest
+
+podAnnotations: {}
+
+podLabels:
+  Application: backend
+
+service:
+  type: ClusterIP
+  name: simpletime-service
+  port: 8080
+
+ingress:
+  enabled: true
+  className: alb
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/load-balancer-name: dev-01-simpletime-ingress-lb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    # alb.ingress.kubernetes.io/healthcheck-path: /health
+    # alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    # alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+    # alb.ingress.kubernetes.io/inbound-cidrs: 176.122.90.90/32
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/tags: service=simpletime,cluster=dev-01,environment=dev
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
+    alb.ingress.kubernetes.io/certificate-arn: 'arn:aws:acm:us-east-1:898344057637:certificate/a24563ec-64ed-4ccf-83da-5ee619872e1f'
+    external-dns.alpha.kubernetes.io/hostname: simpletime.dev-01.wlt.eugene100.org.ua
+    external-dns.alpha.kubernetes.io/set-identifier: simpletime-dev-01
+  hosts:
+    - host: simpletime.dev-01.wlt.eugene100.org.ua
+      paths:
+        - path: /*
+          pathType: ImplementationSpecific
+
+  tls: []
+
+
+autoscaling:
+  enabled: false
+
