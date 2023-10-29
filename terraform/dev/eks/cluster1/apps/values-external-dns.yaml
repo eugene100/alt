@@ -1,0 +1,18 @@
+serviceAccount:
+  create: true
+  name: "external-dns-sa"
+
+# txtOwnerId is required but passed in via the cluster helm chart
+domainFilters:
+  - "dev-01.wlt.eugene100.org.ua"
+
+provider: aws
+
+aws:
+  zoneType: "public"
+
+txtOwnerId: "Z050421624ONUFMOF9J51"
+
+podSecurityContext:
+  fsGroup: 65534
+  runAsUser: 0
