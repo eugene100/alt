@@ -28,7 +28,7 @@ If you have any questions do not hesitate to ping me.
 
 Regards!
 
-## Development
+## Simpletime application development
 
 ### How to build docker image
 ```bash
@@ -36,7 +36,7 @@ cd app/simpletime/
 docker build -t <image name> .
 ```
 
-### How to run container
+### How to run container localy
 ```bash
 docker run -it -p 8080:8080 <image name>
 # Check app health. Shuold return 200
@@ -52,12 +52,24 @@ docker tag f0146b5af542 898344057637.dkr.ecr.us-east-1.amazonaws.com/simpletime
 docker push 898344057637.dkr.ecr.us-east-1.amazonaws.com/simpletime
 ```
 
+Apply helm chart of the application with values file
+```bash
+cd helm/simpletime
+helm upgrade -n backend -i simpletime -f values-dev.yaml .
+```
+
 ## Infrastructure
 
 Infrastructure is created using terraform. It creates VPC, EKS cluster, ECR repository and IAM roles.
+Also, additional Kubernetes resources are created:
+- AWS Load Balancer Controller
+- AWS VPC CNI
+- CoreDNS
+- External DNS
+- kube-proxy
 
 ### VPC
-Located in terraform/dev/vpc. It creates VPC with 2 public subnets and 2 private subnets. Public subnets are used for EKS cluster. Private subnets are used for EKS worker nodes.
+Terraform code located in terraform/dev/vpc. It creates VPC with 3 public subnets and 3 private subnets. Public subnets are used for EKS cluster. Private subnets are used for EKS fargate nodes.
 
 ### EKS
 Located in terraform/dev/eks. It creates EKS cluster and Fargate profiles.
@@ -87,11 +99,7 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 #### External DNS
 
 Follow by: [Installing ExternalDNS](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md)
-
-```
-cd terraform/dev/eks/cluster1/apps
-helm install external-dns bitnami/external-dns -n kube-system -f values-external-dns.yaml
-```
+Installed using plain [mainifest](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md#manifest-for-clusters-with-rbac-enabled).
 
 ### simpletime
 Located in `terraform/dev/simpletime`. It creates ECR repository for simpletime application.
@@ -102,8 +110,18 @@ cd app/helm/simpletime/
 helm upgrade -n backend -i simpletime -f values-dev.yaml .
 ```
 
+simpletime application is available at https://simpletime.dev-01.wlt.eugene100.org.ua/
+
 ## What can be improved
 
 ### Application
 - Using WSGI instead of buildin
 - Using templates instead of hardcoded html
+
+### Infrastructure
+- Implement ExternalDNS, AWS Load Balancer Controller and simpletime app using terraform code or helm charts
+- Implement CI/CD
+
+### ToDo
+- Add Route53 zone as a code using terraform
+- Add SSL certificate for *.dev-01.wlt.eugene100.org.ua using terraform
