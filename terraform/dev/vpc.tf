@@ -3,11 +3,11 @@ module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.1.2"
 
-  name                         = var.name
-  cidr                         = var.vpc_cidr
-  azs                          = split(",", var.azs)
-  public_subnets               = split(",", var.public_subnets)
-  private_subnets              = split(",", var.private_subnets)
+  name            = var.name
+  cidr            = var.vpc_cidr
+  azs             = split(",", var.azs)
+  public_subnets  = split(",", var.public_subnets)
+  private_subnets = split(",", var.private_subnets)
 
   enable_dns_hostnames   = true
   enable_dns_support     = true
@@ -16,12 +16,14 @@ module "vpc" {
   one_nat_gateway_per_az = true
 
   tags = {
-    "wl:environment" = var.name
-    "wl:service"     = "vpc"
+    "wl:environment"               = var.name
+    "wl:service"                   = "vpc"
+    "kubernetes.io/role/elb"       = 1
+    "kubernetes.io/cluster/dev-01" = "owned"
   }
 
   vpc_tags = {
-    Name                                              = var.name
+    Name                          = var.name
     "kubernetes.io/cluster/wl-01" = "shared"
   }
 }
