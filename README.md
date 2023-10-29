@@ -68,12 +68,38 @@ aws eks update-kubeconfig --region us-east-1 --name dev-01
 kubectx arn:aws:eks:us-east-1:898344057637:cluster/dev-01
 ```
 
+### Additional Kubernetes resources
+
+#### aws-load-balancer-controller
+
+Follow by: [Installing the AWS Load Balancer Controller add-on](https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html)
+
+```
+helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
+    --set clusterName=dev-01 \
+    --set serviceAccount.create=false \
+    --set region=us-east-1 \
+    --set vpcId=vpc-0724475a9515e949c \
+    --set serviceAccount.name=aws-load-balancer-controller \
+    -n kube-system
+```
+
+#### External DNS
+
+Follow by: [Installing ExternalDNS](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md)
+
+```
+cd terraform/dev/eks/cluster1/apps
+helm install external-dns bitnami/external-dns -n kube-system -f values-external-dns.yaml
+```
+
 ### simpletime
 Located in `terraform/dev/simpletime`. It creates ECR repository for simpletime application.
 Helm chart is located in `app/helm/simpletime/`. It creates deployment and service for simpletime application.
 Upgrading simpletime application
 ```bash
-helm upgrade -i simpletime .
+cd app/helm/simpletime/
+helm upgrade -n backend -i simpletime -f values-dev.yaml .
 ```
 
 ## What can be improved
