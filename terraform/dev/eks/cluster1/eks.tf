@@ -6,8 +6,15 @@ module "eks" {
   cluster_endpoint_public_access = true
 
   cluster_addons = {
-    kube-proxy = {}
-    vpc-cni    = {}
+    coredns = {
+      most_recent = true
+    }
+    kube-proxy = {
+      most_recent = true
+    }
+    vpc-cni = {
+      most_recent = true
+    }
   }
 
   vpc_id                   = local.vpc_id
@@ -48,15 +55,23 @@ module "eks" {
         }
       }
     },
-    # { for i in range(3) :
-    #   "kube-system-${element(split("-", local.azs[i]), 2)}" => {
-    #     selectors = [
-    #       { namespace = "kube-system" }
-    #     ]
-    #     # We want to create a profile per AZ for high availability
-    #     subnet_ids = [element(module.vpc.private_subnets, i)]
-    #   }
-    # }
+    {
+      kube-system = {
+        name = "kube-system"
+        selectors = [
+          {
+            namespace = "kube-system"
+          }
+        ]
+
+        tags = local.tags
+
+        timeouts = {
+          create = "20m"
+          delete = "20m"
+        }
+      }
+    }
   )
 
   tags = local.tags

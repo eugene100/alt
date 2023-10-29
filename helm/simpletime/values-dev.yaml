@@ -32,7 +32,6 @@ ingress:
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
     alb.ingress.kubernetes.io/certificate-arn: 'arn:aws:acm:us-east-1:898344057637:certificate/a24563ec-64ed-4ccf-83da-5ee619872e1f'
     external-dns.alpha.kubernetes.io/hostname: simpletime.dev-01.wlt.eugene100.org.ua
-    external-dns.alpha.kubernetes.io/set-identifier: simpletime-dev-01
   hosts:
     - host: simpletime.dev-01.wlt.eugene100.org.ua
       paths:
